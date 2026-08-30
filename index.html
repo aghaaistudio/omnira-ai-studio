@@ -3,155 +3,1033 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Omnira AI Studio</title>
+    <title>Agha AI Ad Studio</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-    <!-- HIDDEN FILE INPUT FOR GALLERY UPLOAD -->
-    <input type="file" id="galleryFileInput" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(event)" />
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
+    <div class="toast-container" id="toastContainer"></div>
 
-    <!-- TOAST -->
-    <div id="toast" class="toast"></div>
+    <!-- ============================================================
+    SIDEBAR OVERLAY
+    ============================================================ -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-    <!-- LOGIN MODAL -->
-    <div id="loginModal" class="modal-overlay">
-        <div class="modal-content">
-            <h3 class="text-white">🔐 Sign In</h3>
-            <p class="text-gray-400">Access your Omnira AI Studio account.</p>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs text-gray-400 font-medium block mb-1">Email</label>
-                    <input type="email" id="loginEmail" placeholder="you@example.com" value="demo@ai.studio" />
+    <!-- ============================================================
+    APP LAYOUT
+    ============================================================ -->
+    <div class="app-layout">
+
+        <!-- ============================================================
+        SIDEBAR
+        ============================================================ -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo">
+                    <img src="https://i.postimg.cc/0Qr56FwW/file-00000000c33c82079684c6e3557afcd7.png" alt="Agha AI" />
                 </div>
                 <div>
-                    <label class="text-xs text-gray-400 font-medium block mb-1">Password</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••" value="password123" />
-                </div>
-                <div class="flex items-center justify-between text-xs text-gray-400">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" checked /> Remember me
-                    </label>
-                    <span class="text-purple-400 cursor-pointer hover:underline" onclick="showToast('Password reset link sent!', 'info')">Forgot password?</span>
-                </div>
-                <button onclick="handleLogin()" class="btn-primary w-full text-center">Sign In</button>
-                <div class="relative my-4">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-700"></div></div>
-                    <div class="relative flex justify-center text-xs"><span class="bg-[#14141e] px-2 text-gray-500">or continue with</span></div>
-                </div>
-                <div class="grid grid-cols-3 gap-2">
-                    <button class="btn-secondary text-sm py-2" onclick="showToast('Google OAuth - Coming soon!', 'info')">G</button>
-                    <button class="btn-secondary text-sm py-2" onclick="showToast('GitHub OAuth - Coming soon!', 'info')">GH</button>
-                    <button class="btn-secondary text-sm py-2" onclick="showToast('Apple OAuth - Coming soon!', 'info')">Apple</button>
-                </div>
-                <div class="text-center mt-4">
-                    <button onclick="toggleModal('loginModal', false)" class="text-xs text-gray-400 hover:text-white">Cancel</button>
+                    <div class="name">Agha AI Ad</div>
+                    <div class="sub">Studio</div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- MAIN APP STRUCTURE -->
-    <div class="flex min-h-screen">
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="sidebar">
-            <div class="flex items-center gap-3 px-4 py-2 mb-6">
-                <span class="text-2xl">🎬</span>
-                <span class="font-bold text-lg gradient-text">Omnira AI Studio</span>
-            </div>
-            
-            <nav class="space-y-1 flex-1">
-                <div class="sidebar-group-label">Core Tools</div>
-                <div class="sidebar-item active" onclick="switchTab('dashboard')">
-                    <span>🏠</span> Dashboard
+            <nav class="sidebar-nav">
+                <div class="group-label">Main</div>
+                <div class="item active" data-page="dashboard" onclick="navigateTo('dashboard')">
+                    <span class="icon">📊</span> Dashboard
                 </div>
-                <div class="sidebar-item" onclick="switchTab('generator')">
-                    <span>🪄</span> Media Generator
-                </div>
-                <div class="sidebar-item" onclick="switchTab('gallery')">
-                    <span>🖼️</span> Asset Gallery
+                <div class="item" data-page="create" onclick="navigateTo('create')">
+                    <span class="icon">✨</span> Create Ad
                 </div>
 
-                <div class="sidebar-group-label">Settings & Access</div>
-                <div class="sidebar-item" onclick="toggleModal('loginModal', true)">
-                    <span>🔐</span> Account / Sign In
+                <div class="group-label">AI Ad Creation</div>
+                <div class="item" data-page="ad-script" onclick="navigateTo('ad-script')">
+                    <span class="icon">📝</span> Ad Script
+                </div>
+                <div class="item" data-page="image-ad" onclick="navigateTo('image-ad')">
+                    <span class="icon">🖼️</span> Image Ad
+                </div>
+                <div class="item" data-page="video-ad" onclick="navigateTo('video-ad')">
+                    <span class="icon">🎬</span> Video Ad
+                </div>
+                <div class="item" data-page="script-to-video" onclick="navigateTo('script-to-video')">
+                    <span class="icon">📹</span> Script to Video
+                </div>
+                <div class="item" data-page="ugc-ad" onclick="navigateTo('ugc-ad')">
+                    <span class="icon">🎭</span> UGC Ad
+                </div>
+                <div class="item" data-page="social-ad" onclick="navigateTo('social-ad')">
+                    <span class="icon">📱</span> Social Ad
+                </div>
+
+                <div class="group-label">Workspace</div>
+                <div class="item" data-page="projects" onclick="navigateTo('projects')">
+                    <span class="icon">📁</span> Projects
+                </div>
+                <div class="item" data-page="assets" onclick="navigateTo('assets')">
+                    <span class="icon">🖼️</span> Assets
+                </div>
+                <div class="item" data-page="brand-kit" onclick="navigateTo('brand-kit')">
+                    <span class="icon">🎨</span> Brand Kit
+                </div>
+                <div class="item" data-page="history" onclick="navigateTo('history')">
+                    <span class="icon">⏳</span> History
+                </div>
+
+                <div class="group-label">Account</div>
+                <div class="item" data-page="credits" onclick="navigateTo('credits')">
+                    <span class="icon">💰</span> Credits
+                    <span class="badge">1.2K</span>
+                </div>
+                <div class="item" data-page="settings" onclick="navigateTo('settings')">
+                    <span class="icon">⚙️</span> Settings
                 </div>
             </nav>
 
-            <div class="pt-4 border-t border-[var(--border-color)] mt-auto">
-                <div class="flex items-center justify-between px-2 text-xs text-gray-400">
-                    <span>Theme</span>
-                    <button onclick="toggleTheme()" class="btn-secondary py-1 px-3 text-xs">Toggle</button>
+            <div class="sidebar-footer">
+                <div class="user">
+                    <div class="avatar">AK</div>
+                    <div class="info">
+                        <div class="name">Agha Khan</div>
+                        <div class="email">agha@aghastudio.com</div>
+                    </div>
+                </div>
+                <div class="credits">
+                    <span>💎 Credits</span>
+                    <span class="count">1,247</span>
+                </div>
+                <div class="theme-row">
+                    <span>🌓 Theme</span>
+                    <div class="theme-toggle active" id="themeToggle" onclick="toggleTheme()">
+                        <div class="knob"></div>
+                    </div>
                 </div>
             </div>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 flex flex-col min-w-0">
-            <!-- TOP BAR -->
-            <header class="h-18 border-b border-[var(--border-color)] bg-[var(--header-bg)] backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-40">
-                <div class="flex items-center gap-4">
-                    <button class="lg:hidden text-2xl" onclick="toggleSidebar()">☰</button>
-                    <h1 class="text-xl font-bold gradient-text">Omnira AI Studio</h1>
+        <!-- ============================================================
+        MAIN CONTENT
+        ============================================================ -->
+        <main class="main-content">
+
+            <!-- ============================================================
+            HEADER
+            ============================================================ -->
+            <header class="header">
+                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+                <div class="brand-mobile">
+                    <div class="logo"><img src="https://i.postimg.cc/0Qr56FwW/file-00000000c33c82079684c6e3557afcd7.png" alt="Agha AI" /></div>
+                    <span>Agha AI Ad</span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <span class="provider-badge active"><span class="status-dot green"></span> System Online</span>
-                    <button onclick="toggleModal('loginModal', true)" class="btn-primary text-sm py-2 px-4">Sign In</button>
+                <div class="search">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search projects, assets..." />
+                </div>
+                <div class="actions">
+                    <button onclick="showToast('No new notifications', 'info')" title="Notifications">
+                        🔔 <span class="badge-dot"></span>
+                    </button>
+                    <button onclick="showToast('User profile', 'info')" title="Profile">👤</button>
+                    <button onclick="navigateTo('settings')" title="Settings">⚙️</button>
+                    <button onclick="document.getElementById('loginModal').classList.add('open')" title="Sign In">🔐</button>
                 </div>
             </header>
 
-            <!-- DASHBOARD VIEW -->
-            <div id="dashboard" class="page-section active p-6 content-area">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="glass-card p-6 rounded-2xl" onclick="switchTab('generator')">
-                        <div class="tool-icon-wrap mb-4">🪄</div>
-                        <h3 class="text-lg font-bold mb-1">Generate Content</h3>
-                        <p class="text-sm text-gray-400">Create new video and audio assets using AI models.</p>
-                    </div>
-                    <div class="glass-card p-6 rounded-2xl" onclick="switchTab('gallery')">
-                        <div class="tool-icon-wrap mb-4">🖼️</div>
-                        <h3 class="text-lg font-bold mb-1">Asset Library</h3>
-                        <p class="text-sm text-gray-400">Manage, organize, and export generated media files.</p>
-                    </div>
-                    <div class="glass-card p-6 rounded-2xl" onclick="showToast('Analytics opening...', 'info')">
-                        <div class="tool-icon-wrap mb-4">📊</div>
-                        <h3 class="text-lg font-bold mb-1">Usage Analytics</h3>
-                        <p class="text-sm text-gray-400">View studio credits, rendering status, and usage metrics.</p>
-                    </div>
-                </div>
-            </div>
+            <!-- ============================================================
+            CONTENT AREA
+            ============================================================ -->
+            <div class="content-area" id="contentArea">
 
-            <!-- GENERATOR VIEW -->
-            <div id="generator" class="page-section p-6 content-area">
-                <h2 class="text-2xl font-bold mb-4">Media Generator</h2>
-                <div class="glass p-6 rounded-2xl space-y-4">
-                    <div>
-                        <label class="text-sm font-medium block mb-2">Prompt</label>
-                        <textarea rows="4" placeholder="Describe the scene or audio you want Omnira AI Studio to generate..."></textarea>
+                <!-- ============================================================
+                PAGE: DASHBOARD
+                ============================================================ -->
+                <div class="page active" id="page-dashboard">
+                    <div style="max-width:900px;">
+                        <h1 style="font-size:2.2rem;font-weight:800;line-height:1.2;margin-bottom:4px;">
+                            Create Ads with <span class="gradient-text">AI</span>
+                        </h1>
+                        <p style="color:var(--text-secondary);font-size:1.05rem;margin-bottom:20px;">
+                            Turn products, scripts, images, and ideas into professional advertising content.
+                        </p>
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                            <button class="btn-primary" onclick="navigateTo('create')">✨ Create New Ad</button>
+                            <button class="btn-secondary" onclick="navigateTo('projects')">📁 View Projects</button>
+                        </div>
                     </div>
-                    <button onclick="showToast('Generation request sent!', 'success')" class="btn-primary">Generate Asset</button>
-                </div>
-            </div>
 
-            <!-- GALLERY VIEW -->
-            <div id="gallery" class="page-section p-6 content-area">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold">Asset Gallery</h2>
-                    <button class="gallery-upload-btn" onclick="document.getElementById('galleryFileInput').click()">
-                        <span>📤</span> Upload Assets
-                    </button>
+                    <div class="dash-grid">
+                        <div class="dash-stat"><div class="label">Credits</div><div class="value">1,247</div><div class="sub">Available</div></div>
+                        <div class="dash-stat"><div class="label">Ads Created</div><div class="value" id="statAds">12</div><div class="sub">Total</div></div>
+                        <div class="dash-stat"><div class="label">Videos</div><div class="value" id="statVideos">4</div><div class="sub">Generated</div></div>
+                        <div class="dash-stat"><div class="label">Images</div><div class="value" id="statImages">8</div><div class="sub">Generated</div></div>
+                        <div class="dash-stat"><div class="label">AI Provider</div><div class="value" style="font-size:0.95rem;">Google Gemini</div><div class="sub">Connected</div></div>
+                    </div>
+
+                    <div class="section-title">⚡ Quick Create</div>
+                    <div class="quick-grid">
+                        <div class="quick-card" onclick="openCreateModal('product')"><span class="icon">📹</span><div class="name">Product Ad</div><div class="desc">Video ad</div></div>
+                        <div class="quick-card" onclick="openCreateModal('image')"><span class="icon">🖼️</span><div class="name">Image Ad</div><div class="desc">From image</div></div>
+                        <div class="quick-card" onclick="openCreateModal('video')"><span class="icon">🎬</span><div class="name">Video Ad</div><div class="desc">AI video</div></div>
+                        <div class="quick-card" onclick="openCreateModal('script')"><span class="icon">📝</span><div class="name">Script to Ad</div><div class="desc">Script → ad</div></div>
+                        <div class="quick-card" onclick="openCreateModal('image-to-ad')"><span class="icon">🖼️→📱</span><div class="name">Image to Ad</div><div class="desc">Image → concept</div></div>
+                        <div class="quick-card" onclick="openCreateModal('ugc')"><span class="icon">🎭</span><div class="name">UGC Ad</div><div class="desc">UGC style</div></div>
+                    </div>
+
+                    <div class="section-title">📁 Recent Projects</div>
+                    <div id="recentProjects" style="display:flex;flex-direction:column;gap:8px;">
+                        <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Opening project...', 'info')">
+                            <span style="font-size:1.4rem;">📹</span>
+                            <span style="flex:1;font-weight:500;color:var(--text-primary);">Summer Campaign 2026</span>
+                            <span style="font-size:0.65rem;color:var(--text-muted);">2 days ago</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Opening project...', 'info')">
+                            <span style="font-size:1.4rem;">🎬</span>
+                            <span style="flex:1;font-weight:500;color:var(--text-primary);">Product Launch Video</span>
+                            <span style="font-size:0.65rem;color:var(--text-muted);">5 days ago</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px;padding:14px 20px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:var(--shadow-card);">
+                        <div>
+                            <div style="font-size:0.8rem;font-weight:600;color:var(--text-primary);">🤖 AI Provider</div>
+                            <div style="font-size:0.75rem;color:var(--text-secondary);">Google Gemini · gemini-1.5-flash</div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <span class="badge-provider active">● Connected</span>
+                            <button class="btn-secondary btn-sm" onclick="navigateTo('settings')">Manage</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="drop-zone mb-6" onclick="document.getElementById('galleryFileInput').click()">
-                    <p class="text-gray-400">Drag and drop assets here, or click to upload</p>
+
+                <!-- ============================================================
+                PAGE: CREATE AD
+                ============================================================ -->
+                <div class="page" id="page-create">
+                    <div style="max-width:700px;margin:0 auto;">
+                        <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:4px;">✨ Create New Ad</h2>
+                        <p style="color:var(--text-secondary);margin-bottom:20px;">Choose an ad type and enter your brand/product information.</p>
+
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+                            <button class="btn-secondary" onclick="openCreateModal('product')" style="text-align:center;padding:16px;font-weight:600;">📹 Product Ad</button>
+                            <button class="btn-secondary" onclick="openCreateModal('image')" style="text-align:center;padding:16px;font-weight:600;">🖼️ Image Ad</button>
+                            <button class="btn-secondary" onclick="openCreateModal('video')" style="text-align:center;padding:16px;font-weight:600;">🎬 Video Ad</button>
+                            <button class="btn-secondary" onclick="openCreateModal('script')" style="text-align:center;padding:16px;font-weight:600;">📝 Script to Ad</button>
+                            <button class="btn-secondary" onclick="openCreateModal('image-to-ad')" style="text-align:center;padding:16px;font-weight:600;">🖼️→📱 Image to Ad</button>
+                            <button class="btn-secondary" onclick="openCreateModal('ugc')" style="text-align:center;padding:16px;font-weight:600;">🎭 UGC Ad</button>
+                            <button class="btn-secondary" onclick="openCreateModal('social')" style="text-align:center;padding:16px;font-weight:600;">📱 Social Ad</button>
+                            <button class="btn-secondary" onclick="openCreateModal('script-generator')" style="text-align:center;padding:16px;font-weight:600;">📝 Ad Script</button>
+                        </div>
+
+                        <div style="padding:20px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);text-align:center;box-shadow:var(--shadow-card);">
+                            <div style="font-size:2.8rem;margin-bottom:4px;">🚀</div>
+                            <div style="font-weight:600;color:var(--text-primary);">Select an ad type above</div>
+                            <div style="font-size:0.85rem;color:var(--text-secondary);">Each type has a tailored workflow</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="preview-grid" id="previewGrid"></div>
+
+                <!-- ============================================================
+                PAGE: AD SCRIPT
+                ============================================================ -->
+                <div class="page" id="page-ad-script">
+                    <div class="max-w-700">
+                        <h2 style="font-size:1.4rem;font-weight:700;">📝 Ad Script Generator</h2>
+                        <p style="color:var(--text-secondary);margin-bottom:16px;">Generate professional ad scripts with AI.</p>
+
+                        <div class="form-group"><label>Brand / Product</label><input type="text" id="scriptBrand" value="Aura Sound" placeholder="e.g. Nike" /></div>
+                        <div class="form-group"><label>Product / Service</label><input type="text" id="scriptProduct" value="Premium Wireless Headphones" placeholder="e.g. Running Shoes" /></div>
+                        <div class="form-group"><label>Description</label><textarea id="scriptDesc" rows="2">Premium wireless headphones with active noise cancellation, 40-hour battery life, and studio-grade sound.</textarea></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Target Audience</label><input type="text" id="scriptAudience" value="Young adults, professionals" /></div>
+                            <div class="form-group"><label>Platform</label><select id="scriptPlatform"><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Tone</label><select id="scriptTone"><option value="professional">Professional</option><option value="premium">Premium</option><option value="friendly">Friendly</option><option value="emotional">Emotional</option><option value="bold">Bold</option><option value="luxury">Luxury</option></select></div>
+                            <div class="form-group"><label>Duration</label><select id="scriptDuration"><option value="15">15 sec</option><option value="30" selected>30 sec</option><option value="60">60 sec</option></select></div>
+                        </div>
+                        <div class="form-group"><label>Call to Action</label><input type="text" id="scriptCTA" value="Shop Now" /></div>
+
+                        <button class="btn-primary" onclick="generateScript()">✨ Generate Ad Script</button>
+
+                        <div id="scriptResult" class="result-box hidden">
+                            <div class="result-header"><span class="title">📄 Generated Script</span><span style="font-size:0.65rem;color:var(--text-muted);">AI Generated</span></div>
+                            <div class="result-content" id="scriptResultContent"></div>
+                            <div class="result-actions">
+                                <button onclick="copyResult('scriptResultContent')">📋 Copy</button>
+                                <button onclick="generateScript()">🔄 Regenerate</button>
+                                <button onclick="downloadText('scriptResultContent','ad-script.txt')">⬇️ Download</button>
+                                <button onclick="saveToProject('Ad Script','scriptResultContent')">💾 Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: IMAGE AD
+                ============================================================ -->
+                <div class="page" id="page-image-ad">
+                    <div class="max-w-700">
+                        <h2 style="font-size:1.4rem;font-weight:700;">🖼️ Image Ad Creator</h2>
+                        <p style="color:var(--text-secondary);margin-bottom:16px;">Generate professional image advertisements.</p>
+
+                        <div class="form-row">
+                            <div class="form-group"><label>Brand</label><input type="text" id="imgBrand" value="Aura Sound" /></div>
+                            <div class="form-group"><label>Product</label><input type="text" id="imgProduct" value="Premium Headphones" /></div>
+                        </div>
+                        <div class="form-group"><label>Ad Style</label><select id="imgStyle"><option value="modern">Modern</option><option value="premium">Premium</option><option value="minimal">Minimal</option><option value="bold">Bold</option><option value="cinematic">Cinematic</option></select></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Platform</label><select id="imgPlatform"><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="linkedin">LinkedIn</option></select></div>
+                            <div class="form-group"><label>Aspect Ratio</label><select id="imgRatio"><option value="1:1">1:1 Square</option><option value="4:5">4:5 Social</option><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Vertical</option></select></div>
+                        </div>
+                        <div class="form-group"><label>CTA Text</label><input type="text" id="imgCTA" value="Shop Now" /></div>
+
+                        <button class="btn-primary" onclick="generateImageAd()">✨ Generate Image Ad</button>
+
+                        <div id="imgResult" class="result-box hidden">
+                            <div class="result-header"><span class="title">🖼️ Generated Image Ad</span><span style="font-size:0.65rem;color:var(--text-muted);">AI Generated</span></div>
+                            <div style="display:flex;justify-content:center;padding:16px 0;">
+                                <div style="width:100%;max-width:350px;aspect-ratio:1/1;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:24px;text-align:center;border:1px solid var(--border-color);box-shadow:var(--shadow-card);">
+                                    <div style="font-size:3rem;margin-bottom:8px;">🖼️</div>
+                                    <div style="font-weight:700;font-size:1.1rem;" id="imgResultTitle">Aura Sound</div>
+                                    <div style="font-size:0.9rem;opacity:0.9;" id="imgResultCTA">Shop Now</div>
+                                    <div style="font-size:0.65rem;opacity:0.6;margin-top:6px;" id="imgResultFormat">Instagram · 1:1</div>
+                                </div>
+                            </div>
+                            <div class="result-actions" style="justify-content:center;">
+                                <button onclick="generateImageAd()">🔄 Regenerate</button>
+                                <button onclick="downloadImageAd()">⬇️ Download Image</button>
+                                <button onclick="saveToProject('Image Ad','imgResultTitle')">💾 Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: VIDEO AD
+                ============================================================ -->
+                <div class="page" id="page-video-ad">
+                    <div class="max-w-700">
+                        <h2 style="font-size:1.4rem;font-weight:700;">🎬 Video Ad Creator</h2>
+                        <p style="color:var(--text-secondary);margin-bottom:16px;">Create AI-powered video advertisements.</p>
+
+                        <div class="form-row">
+                            <div class="form-group"><label>Brand</label><input type="text" id="vidBrand" value="Aura Sound" /></div>
+                            <div class="form-group"><label>Product</label><input type="text" id="vidProduct" value="Premium Headphones" /></div>
+                        </div>
+                        <div class="form-group"><label>Product Description</label><textarea id="vidDesc" rows="2">Premium wireless headphones with active noise cancellation and studio-grade sound.</textarea></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Target Audience</label><input type="text" id="vidAudience" value="Young professionals" /></div>
+                            <div class="form-group"><label>Platform</label><select id="vidPlatform"><option value="instagram">Instagram</option><option value="youtube">YouTube</option><option value="tiktok">TikTok</option></select></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Visual Style</label><select id="vidStyle"><option value="cinematic">Cinematic</option><option value="commercial">Commercial</option><option value="product-showcase">Product Showcase</option><option value="ugc">UGC</option><option value="premium">Premium</option></select></div>
+                            <div class="form-group"><label>Duration</label><select id="vidDuration"><option value="15">15 sec</option><option value="30" selected>30 sec</option><option value="60">60 sec</option></select></div>
+                        </div>
+
+                        <button class="btn-primary" onclick="generateVideoAd()">🎬 Generate Video Ad</button>
+
+                        <div id="vidResult" class="result-box hidden">
+                            <div class="result-header"><span class="title">🎬 Generated Video Ad</span><span style="font-size:0.65rem;color:var(--text-muted);">AI Generated</span></div>
+                            <div style="display:flex;justify-content:center;padding:16px 0;">
+                                <div style="width:100%;max-width:300px;aspect-ratio:9/16;background:linear-gradient(180deg,var(--accent-dark),var(--bg-primary));border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:24px;text-align:center;border:1px solid var(--border-color);position:relative;box-shadow:var(--shadow-card);">
+                                    <div style="font-size:3rem;margin-bottom:6px;">🎬</div>
+                                    <div style="font-weight:700;font-size:1rem;" id="vidResultTitle">Aura Sound Pro</div>
+                                    <div style="font-size:0.75rem;opacity:0.8;margin-top:4px;" id="vidResultDesc">Premium wireless headphones</div>
+                                    <div style="position:absolute;bottom:12px;right:12px;font-size:0.55rem;opacity:0.5;" id="vidResultDuration">30s</div>
+                                    <div style="position:absolute;bottom:12px;left:12px;font-size:0.55rem;opacity:0.5;">▶️ 0:00</div>
+                                </div>
+                            </div>
+                            <div class="result-actions" style="justify-content:center;">
+                                <button onclick="generateVideoAd()">🔄 Regenerate</button>
+                                <button onclick="downloadVideoAd()">⬇️ Download Video</button>
+                                <button onclick="saveToProject('Video Ad','vidResultTitle')">💾 Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: SCRIPT TO VIDEO
+                ============================================================ -->
+                <div class="page" id="page-script-to-video">
+                    <div class="max-w-700">
+                        <h2 style="font-size:1.4rem;font-weight:700;">📹 Script to Video</h2>
+                        <p style="color:var(--text-secondary);margin-bottom:16px;">Turn your script into a full video ad.</p>
+
+                        <div class="form-group"><label>Your Script</label><textarea id="stvScript" rows="4">Hook: Tired of bad audio? Problem: Most headphones lack clarity. Solution: Aura Sound Pro with studio-grade sound. Benefits: 40-hour battery, noise cancellation. CTA: Shop now.</textarea></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Visual Style</label><select id="stvStyle"><option value="cinematic">Cinematic</option><option value="commercial">Commercial</option><option value="ugc">UGC</option></select></div>
+                            <div class="form-group"><label>Aspect Ratio</label><select id="stvRatio"><option value="16:9">16:9 Landscape</option><option value="9:16">9:16 Vertical</option><option value="1:1">1:1 Square</option></select></div>
+                        </div>
+
+                        <button class="btn-primary" onclick="generateScriptToVideo()">📹 Generate Video from Script</button>
+
+                        <div id="stvResult" class="result-box hidden">
+                            <div class="result-header"><span class="title">📹 Generated Video</span><span style="font-size:0.65rem;color:var(--text-muted);">AI Generated</span></div>
+                            <div style="display:flex;justify-content:center;padding:16px 0;">
+                                <div style="width:100%;max-width:350px;aspect-ratio:16/9;background:linear-gradient(135deg,var(--accent),var(--bg-primary));border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:24px;text-align:center;border:1px solid var(--border-color);box-shadow:var(--shadow-card);">
+                                    <div style="font-size:3rem;margin-bottom:6px;">📹</div>
+                                    <div style="font-weight:700;font-size:1rem;" id="stvResultTitle">Script to Video</div>
+                                    <div style="font-size:0.65rem;opacity:0.7;margin-top:4px;">4 scenes · 30s</div>
+                                </div>
+                            </div>
+                            <div style="margin-top:12px;">
+                                <div class="scene-grid">
+                                    <div class="scene-card"><div class="num">Scene 01</div><div class="title">Hook</div><div class="desc">"Tired of bad audio?"</div><div class="tags"><span>VO</span><span>Text</span></div></div>
+                                    <div class="scene-card"><div class="num">Scene 02</div><div class="title">Problem</div><div class="desc">Visual: Frustrated person</div><div class="tags"><span>Visual</span><span>SFX</span></div></div>
+                                    <div class="scene-card"><div class="num">Scene 03</div><div class="title">Solution</div><div class="desc">Product hero shot</div><div class="tags"><span>Hero</span><span>VO</span></div></div>
+                                    <div class="scene-card"><div class="num">Scene 04</div><div class="title">CTA</div><div class="desc">"Shop Now"</div><div class="tags"><span>Text</span><span>CTA</span></div></div>
+                                </div>
+                            </div>
+                            <div class="result-actions" style="justify-content:center;margin-top:8px;">
+                                <button onclick="generateScriptToVideo()">🔄 Regenerate</button>
+                                <button onclick="downloadVideoAd()">⬇️ Download Video</button>
+                                <button onclick="saveToProject('Script to Video','stvResultTitle')">💾 Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: UGC AD
+                ============================================================ -->
+                <div class="page" id="page-ugc-ad">
+                    <div class="max-w-700">
+                        <h2 style="font-size:1.4rem;font-weight:700;">🎭 UGC Ad Generator</h2>
+                        <p style="color:var(--text-secondary);margin-bottom:16px;">Create authentic user-generated content style ads.</p>
+
+                        <div class="form-row">
+                            <div class="form-group"><label>Product</label><input type="text" id="ugcProduct" value="Aura Sound Pro" /></div>
+                            <div class="form-group"><label>Target Audience</label><input type="text" id="ugcAudience" value="Young adults, 18-35" /></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>UGC Style</label><select id="ugcStyle"><option value="honest-review">Honest Review</option><option value="tutorial">Tutorial</option><option value="testimonial">Testimonial</option><option value="reaction">Reaction</option></select></div>
+                            <div class="form-group"><label>Platform</label><select id="ugcPlatform"><option value="tiktok">TikTok</option><option value="instagram">Instagram</option></select></div>
+                        </div>
+                        <div class="form-group"><label>Hook</label><input type="text" id="ugcHook" value="I've been using these headphones for a week..." /></div>
+
+                        <button class="btn-primary" onclick="generateUgcAd()">🎭 Generate UGC Ad</button>
+
+                        <div id="ugcResult" class="result-box hidden">
+                            <div class="result-header"><span class="title">🎭 UGC Ad</span><span style="font-size:0.65rem;color:var(--text-muted);">AI Generated</span></div>
+                            <div class="result-content" id="ugcResultContent"></div>
+                            <div class="result-actions">
+                                <button onclick="copyResult('ugcResultContent')">📋 Copy</button>
+                                <button onclick="generateUgcAd()">🔄 Regenerate</button>
+                                <button onclick="downloadText('ugcResultContent','ugc-ad.txt')">⬇️ Download</button>
+                                <button onclick="saveToProject('UGC Ad','ugcResultContent')">💾 Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: SOCIAL AD
+                ============================================================ -->
+                <div class="page" id="page-social-ad">
+                    <div class="max-w-700">
+                        <h2 style="font-size:1.4rem;font-weight:700;">📱 Social Media Ad</h2>
+                        <p style="color:var(--text-secondary);margin-bottom:16px;">Create ads optimized for social platforms.</p>
+
+                        <div class="form-row">
+                            <div class="form-group"><label>Brand</label><input type="text" id="socialBrand" value="Aura Sound" /></div>
+                            <div class="form-group"><label>Product</label><input type="text" id="socialProduct" value="Premium Headphones" /></div>
+                        </div>
+                        <div class="form-group"><label>Description</label><textarea id="socialDesc" rows="2">Premium wireless headphones with studio-grade sound.</textarea></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Platform</label><select id="socialPlatform"><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div>
+                            <div class="form-group"><label>Ad Objective</label><select id="socialObjective"><option value="awareness">Brand Awareness</option><option value="sales">Sales</option><option value="engagement">Engagement</option></select></div>
+                        </div>
+
+                        <button class="btn-primary" onclick="generateSocialAd()">📱 Generate Social Ad</button>
+
+                        <div id="socialResult" class="result-box hidden">
+                            <div class="result-header"><span class="title">📱 Social Ad</span><span style="font-size:0.65rem;color:var(--text-muted);">AI Generated</span></div>
+                            <div class="result-content" id="socialResultContent"></div>
+                            <div class="result-actions">
+                                <button onclick="copyResult('socialResultContent')">📋 Copy</button>
+                                <button onclick="generateSocialAd()">🔄 Regenerate</button>
+                                <button onclick="downloadText('socialResultContent','social-ad.txt')">⬇️ Download</button>
+                                <button onclick="saveToProject('Social Ad','socialResultContent')">💾 Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: PROJECTS
+                ============================================================ -->
+                <div class="page" id="page-projects">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+                        <h2 style="font-size:1.4rem;font-weight:700;">📁 Projects</h2>
+                        <button class="btn-primary btn-sm" onclick="showToast('Create project - Coming soon!', 'info')">+ New Project</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;">
+                        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Opening project...', 'info')">
+                            <div style="font-size:2rem;">📹</div>
+                            <div style="font-weight:600;color:var(--text-primary);margin-top:4px;">Summer Campaign 2026</div>
+                            <div style="font-size:0.65rem;color:var(--text-secondary);">2 ads · Updated 2d ago</div>
+                        </div>
+                        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Opening project...', 'info')">
+                            <div style="font-size:2rem;">🎬</div>
+                            <div style="font-weight:600;color:var(--text-primary);margin-top:4px;">Product Launch Video</div>
+                            <div style="font-size:0.65rem;color:var(--text-secondary);">1 video · Updated 5d ago</div>
+                        </div>
+                        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Opening project...', 'info')">
+                            <div style="font-size:2rem;">📱</div>
+                            <div style="font-weight:600;color:var(--text-primary);margin-top:4px;">Social Media Ads Q2</div>
+                            <div style="font-size:0.65rem;color:var(--text-secondary);">4 ads · Updated 1w ago</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: ASSETS
+                ============================================================ -->
+                <div class="page" id="page-assets">
+                    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
+                        <h2 style="font-size:1.4rem;font-weight:700;">🖼️ Assets</h2>
+                        <button class="btn-primary btn-sm" onclick="showToast('Upload assets - Coming soon!', 'info')">+ Upload</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;">
+                        <div style="aspect-ratio:1;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Asset: Product Image', 'info')">
+                            <div style="font-size:2.2rem;">🖼️</div>
+                            <div style="font-size:0.55rem;color:var(--text-secondary);margin-top:4px;">product-1.png</div>
+                        </div>
+                        <div style="aspect-ratio:1;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Asset: Logo', 'info')">
+                            <div style="font-size:2.2rem;">🏷️</div>
+                            <div style="font-size:0.55rem;color:var(--text-secondary);margin-top:4px;">logo.png</div>
+                        </div>
+                        <div style="aspect-ratio:1;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Asset: Video', 'info')">
+                            <div style="font-size:2.2rem;">🎬</div>
+                            <div style="font-size:0.55rem;color:var(--text-secondary);margin-top:4px;">promo.mp4</div>
+                        </div>
+                        <div style="aspect-ratio:1;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-card);" onclick="showToast('Asset: Audio', 'info')">
+                            <div style="font-size:2.2rem;">🎵</div>
+                            <div style="font-size:0.55rem;color:var(--text-secondary);margin-top:4px;">music.mp3</div>
+                        </div>
+                        <div style="aspect-ratio:1;background:var(--bg-card);border:2px dashed var(--border-color);border-radius:var(--radius);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;" onclick="showToast('Upload new asset', 'info')">
+                            <div style="font-size:2rem;color:var(--text-muted);">+</div>
+                            <div style="font-size:0.55rem;color:var(--text-muted);">Add Asset</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: BRAND KIT
+                ============================================================ -->
+                <div class="page" id="page-brand-kit">
+                    <h2 style="font-size:1.4rem;font-weight:700;">🎨 Brand Kit</h2>
+                    <p style="color:var(--text-secondary);margin-bottom:16px;">Your brand identity for consistent advertising.</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:700px;">
+                        <div class="form-group"><label>Brand Name</label><input type="text" value="Agha AI" /></div>
+                        <div class="form-group"><label>Tagline</label><input type="text" value="AI Advertising Studio" /></div>
+                        <div class="form-group"><label>Primary Color</label><input type="color" value="#d4628a" style="padding:4px;height:44px;" /></div>
+                        <div class="form-group"><label>Secondary Color</label><input type="color" value="#e885aa" style="padding:4px;height:44px;" /></div>
+                        <div class="form-group"><label>Website</label><input type="text" value="https://aghastudio.com" /></div>
+                        <div class="form-group"><label>Support Email</label><input type="text" value="aghaaistoudio@gmail.com" /></div>
+                        <div class="form-group" style="grid-column:1/-1;"><label>Brand Voice</label><select><option>Professional</option><option selected>Premium</option><option>Friendly</option><option>Bold</option></select></div>
+                    </div>
+                    <button class="btn-primary" onclick="showToast('Brand Kit saved!', 'success')">💾 Save Brand Kit</button>
+                </div>
+
+                <!-- ============================================================
+                PAGE: HISTORY
+                ============================================================ -->
+                <div class="page" id="page-history">
+                    <h2 style="font-size:1.4rem;font-weight:700;">⏳ Generation History</h2>
+                    <p style="color:var(--text-secondary);margin-bottom:16px;">All your AI generations in one place.</p>
+                    <div style="display:flex;flex-direction:column;gap:8px;max-width:700px;">
+                        <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);box-shadow:var(--shadow-card);">
+                            <span style="font-size:1.2rem;">📝</span>
+                            <span style="flex:1;font-weight:500;color:var(--text-primary);">Ad Script · Aura Sound</span>
+                            <span style="font-size:0.65rem;color:var(--text-muted);">2 min ago</span>
+                            <span class="badge-provider active">Completed</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);box-shadow:var(--shadow-card);">
+                            <span style="font-size:1.2rem;">🖼️</span>
+                            <span style="flex:1;font-weight:500;color:var(--text-primary);">Image Ad · Summer Campaign</span>
+                            <span style="font-size:0.65rem;color:var(--text-muted);">1 hour ago</span>
+                            <span class="badge-provider active">Completed</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);box-shadow:var(--shadow-card);">
+                            <span style="font-size:1.2rem;">🎬</span>
+                            <span style="flex:1;font-weight:500;color:var(--text-primary);">Video Ad · Product Launch</span>
+                            <span style="font-size:0.65rem;color:var(--text-muted);">3 hours ago</span>
+                            <span class="badge-provider" style="background:rgba(251,191,36,0.12);color:#fbbf24;">Processing</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);box-shadow:var(--shadow-card);">
+                            <span style="font-size:1.2rem;">🎭</span>
+                            <span style="flex:1;font-weight:500;color:var(--text-primary);">UGC Ad · Headphones</span>
+                            <span style="font-size:0.65rem;color:var(--text-muted);">1 day ago</span>
+                            <span class="badge-provider active">Completed</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: CREDITS
+                ============================================================ -->
+                <div class="page" id="page-credits">
+                    <h2 style="font-size:1.4rem;font-weight:700;">💰 Credits</h2>
+                    <p style="color:var(--text-secondary);margin-bottom:16px;">Your credit balance and usage.</p>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:600px;">
+                        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow-card);">
+                            <div style="font-size:0.65rem;text-transform:uppercase;color:var(--text-muted);">Available</div>
+                            <div style="font-size:2rem;font-weight:700;color:var(--text-primary);">1,247</div>
+                        </div>
+                        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow-card);">
+                            <div style="font-size:0.65rem;text-transform:uppercase;color:var(--text-muted);">Used</div>
+                            <div style="font-size:2rem;font-weight:700;color:var(--text-primary);">253</div>
+                        </div>
+                        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow-card);">
+                            <div style="font-size:0.65rem;text-transform:uppercase;color:var(--text-muted);">Total</div>
+                            <div style="font-size:2rem;font-weight:700;color:var(--text-primary);">1,500</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <button class="btn-primary btn-sm" onclick="showToast('Buy credits - Coming soon!', 'info')">💳 Buy Credits</button>
+                    </div>
+                </div>
+
+                <!-- ============================================================
+                PAGE: SETTINGS — AI PROVIDERS EXPANDABLE
+                ============================================================ -->
+                <div class="page" id="page-settings">
+                    <h2 style="font-size:1.4rem;font-weight:700;">⚙️ Settings</h2>
+                    <p style="color:var(--text-secondary);margin-bottom:16px;">Configure your account, AI providers, and preferences.</p>
+
+                    <div class="settings-tabs">
+                        <button class="active" onclick="switchSettingsTab('general')">General</button>
+                        <button onclick="switchSettingsTab('providers')">AI Providers</button>
+                        <button onclick="switchSettingsTab('models')">Models</button>
+                        <button onclick="switchSettingsTab('security')">Security</button>
+                        <button onclick="switchSettingsTab('billing')">Billing</button>
+                        <button onclick="switchSettingsTab('about')">About</button>
+                    </div>
+
+                    <div class="settings-tab active" id="settings-general">
+                        <div style="max-width:500px;">
+                            <div class="form-group"><label>Full Name</label><input type="text" value="Agha Khan" /></div>
+                            <div class="form-group"><label>Email</label><input type="email" value="agha@aghastudio.com" /></div>
+                            <div class="form-group"><label>Plan</label><select><option>Free</option><option selected>Pro</option><option>Enterprise</option></select></div>
+                            <button class="btn-primary" onclick="showToast('Profile updated!', 'success')">Save Changes</button>
+                        </div>
+                    </div>
+
+                    <!-- ============================================================
+                    AI PROVIDERS TAB — EXPANDABLE CARDS
+                    ============================================================ -->
+                    <div class="settings-tab" id="settings-providers">
+                        <p style="color:var(--text-secondary);margin-bottom:12px;">Click on any provider to expand and configure.</p>
+
+                        <div class="provider-grid">
+
+                            <!-- OpenAI -->
+                            <div class="provider-card" id="provider-openai">
+                                <div class="provider-header" onclick="toggleProvider('openai')">
+                                    <div class="left">
+                                        <span class="icon">🤖</span>
+                                        <span class="name">OpenAI</span>
+                                        <span class="models">gpt-4o, gpt-4-turbo</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <span class="status connected">● Connected</span>
+                                        <span class="expand-icon">▼</span>
+                                    </div>
+                                </div>
+                                <div class="provider-body" id="body-openai">
+                                    <div class="form-group">
+                                        <label>API Key</label>
+                                        <div style="display:flex;gap:8px;">
+                                            <input type="password" id="key-openai" value="sk-••••••••••••••••A92K" style="flex:1;" />
+                                            <button class="btn-secondary btn-sm" onclick="toggleKeyVisibility('key-openai')">👁️</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Default Model</label>
+                                            <select id="model-openai">
+                                                <option value="gpt-4o">gpt-4o</option>
+                                                <option value="gpt-4-turbo" selected>gpt-4-turbo</option>
+                                                <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Capabilities</label>
+                                            <select>
+                                                <option>Text, Image, Audio</option>
+                                                <option>Text Only</option>
+                                                <option>Text + Image</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-success btn-sm" onclick="saveProvider('OpenAI')">💾 Save</button>
+                                        <button class="btn-secondary btn-sm" onclick="testProvider('OpenAI')">🔌 Test Connection</button>
+                                        <button class="btn-danger btn-sm" onclick="disconnectProvider('OpenAI')">🔗 Disconnect</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Google Gemini -->
+                            <div class="provider-card" id="provider-gemini">
+                                <div class="provider-header" onclick="toggleProvider('gemini')">
+                                    <div class="left">
+                                        <span class="icon">🧠</span>
+                                        <span class="name">Google Gemini</span>
+                                        <span class="models">gemini-1.5-pro, gemini-1.5-flash</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <span class="status connected">● Connected</span>
+                                        <span class="expand-icon">▼</span>
+                                    </div>
+                                </div>
+                                <div class="provider-body" id="body-gemini">
+                                    <div class="form-group">
+                                        <label>API Key</label>
+                                        <div style="display:flex;gap:8px;">
+                                            <input type="password" id="key-gemini" value="AIza••••••••••••••••" style="flex:1;" />
+                                            <button class="btn-secondary btn-sm" onclick="toggleKeyVisibility('key-gemini')">👁️</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Default Model</label>
+                                            <select id="model-gemini">
+                                                <option value="gemini-1.5-pro">gemini-1.5-pro</option>
+                                                <option value="gemini-1.5-flash" selected>gemini-1.5-flash</option>
+                                                <option value="gemini-1.0-pro">gemini-1.0-pro</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Capabilities</label>
+                                            <select>
+                                                <option>Text, Vision, Audio</option>
+                                                <option>Text Only</option>
+                                                <option>Text + Vision</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-success btn-sm" onclick="saveProvider('Google Gemini')">💾 Save</button>
+                                        <button class="btn-secondary btn-sm" onclick="testProvider('Google Gemini')">🔌 Test Connection</button>
+                                        <button class="btn-danger btn-sm" onclick="disconnectProvider('Google Gemini')">🔗 Disconnect</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Anthropic Claude -->
+                            <div class="provider-card" id="provider-claude">
+                                <div class="provider-header" onclick="toggleProvider('claude')">
+                                    <div class="left">
+                                        <span class="icon">🔮</span>
+                                        <span class="name">Anthropic Claude</span>
+                                        <span class="models">claude-3-opus, claude-3-sonnet</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <span class="status disconnected">● Not connected</span>
+                                        <span class="expand-icon">▼</span>
+                                    </div>
+                                </div>
+                                <div class="provider-body" id="body-claude">
+                                    <div class="form-group">
+                                        <label>API Key</label>
+                                        <div style="display:flex;gap:8px;">
+                                            <input type="password" id="key-claude" value="" placeholder="Enter your API key..." style="flex:1;" />
+                                            <button class="btn-secondary btn-sm" onclick="toggleKeyVisibility('key-claude')">👁️</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Default Model</label>
+                                            <select id="model-claude">
+                                                <option value="claude-3-opus">claude-3-opus</option>
+                                                <option value="claude-3-sonnet" selected>claude-3-sonnet</option>
+                                                <option value="claude-3-haiku">claude-3-haiku</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Capabilities</label>
+                                            <select>
+                                                <option>Text, Vision</option>
+                                                <option>Text Only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-success btn-sm" onclick="saveProvider('Anthropic Claude')">💾 Save</button>
+                                        <button class="btn-secondary btn-sm" onclick="testProvider('Anthropic Claude')">🔌 Test Connection</button>
+                                        <button class="btn-danger btn-sm" onclick="disconnectProvider('Anthropic Claude')">🔗 Disconnect</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- DeepSeek -->
+                            <div class="provider-card" id="provider-deepseek">
+                                <div class="provider-header" onclick="toggleProvider('deepseek')">
+                                    <div class="left">
+                                        <span class="icon">🧊</span>
+                                        <span class="name">DeepSeek</span>
+                                        <span class="models">deepseek-chat, deepseek-coder</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <span class="status disconnected">● Not connected</span>
+                                        <span class="expand-icon">▼</span>
+                                    </div>
+                                </div>
+                                <div class="provider-body" id="body-deepseek">
+                                    <div class="form-group">
+                                        <label>API Key</label>
+                                        <div style="display:flex;gap:8px;">
+                                            <input type="password" id="key-deepseek" value="" placeholder="Enter your API key..." style="flex:1;" />
+                                            <button class="btn-secondary btn-sm" onclick="toggleKeyVisibility('key-deepseek')">👁️</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Default Model</label>
+                                            <select id="model-deepseek">
+                                                <option value="deepseek-chat" selected>deepseek-chat</option>
+                                                <option value="deepseek-coder">deepseek-coder</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Capabilities</label>
+                                            <select>
+                                                <option>Text, Code</option>
+                                                <option>Text Only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-success btn-sm" onclick="saveProvider('DeepSeek')">💾 Save</button>
+                                        <button class="btn-secondary btn-sm" onclick="testProvider('DeepSeek')">🔌 Test Connection</button>
+                                        <button class="btn-danger btn-sm" onclick="disconnectProvider('DeepSeek')">🔗 Disconnect</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- OpenRouter -->
+                            <div class="provider-card" id="provider-openrouter">
+                                <div class="provider-header" onclick="toggleProvider('openrouter')">
+                                    <div class="left">
+                                        <span class="icon">🌐</span>
+                                        <span class="name">OpenRouter</span>
+                                        <span class="models">multiple models</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <span class="status disconnected">● Not connected</span>
+                                        <span class="expand-icon">▼</span>
+                                    </div>
+                                </div>
+                                <div class="provider-body" id="body-openrouter">
+                                    <div class="form-group">
+                                        <label>API Key</label>
+                                        <div style="display:flex;gap:8px;">
+                                            <input type="password" id="key-openrouter" value="" placeholder="Enter your API key..." style="flex:1;" />
+                                            <button class="btn-secondary btn-sm" onclick="toggleKeyVisibility('key-openrouter')">👁️</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Default Model</label>
+                                            <select id="model-openrouter">
+                                                <option value="openrouter/auto">Auto</option>
+                                                <option value="openrouter/gpt-4" selected>GPT-4</option>
+                                                <option value="openrouter/claude">Claude</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Capabilities</label>
+                                            <select>
+                                                <option>Multiple Providers</option>
+                                                <option>Text Only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-success btn-sm" onclick="saveProvider('OpenRouter')">💾 Save</button>
+                                        <button class="btn-secondary btn-sm" onclick="testProvider('OpenRouter')">🔌 Test Connection</button>
+                                        <button class="btn-danger btn-sm" onclick="disconnectProvider('OpenRouter')">🔗 Disconnect</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Replicate -->
+                            <div class="provider-card" id="provider-replicate">
+                                <div class="provider-header" onclick="toggleProvider('replicate')">
+                                    <div class="left">
+                                        <span class="icon">🔄</span>
+                                        <span class="name">Replicate</span>
+                                        <span class="models">video, image models</span>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:10px;">
+                                        <span class="status disconnected">● Not connected</span>
+                                        <span class="expand-icon">▼</span>
+                                    </div>
+                                </div>
+                                <div class="provider-body" id="body-replicate">
+                                    <div class="form-group">
+                                        <label>API Key</label>
+                                        <div style="display:flex;gap:8px;">
+                                            <input type="password" id="key-replicate" value="" placeholder="Enter your API key..." style="flex:1;" />
+                                            <button class="btn-secondary btn-sm" onclick="toggleKeyVisibility('key-replicate')">👁️</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Default Model</label>
+                                            <select id="model-replicate">
+                                                <option value="replicate/llama">Llama</option>
+                                                <option value="replicate/mistral" selected>Mistral</option>
+                                                <option value="replicate/stable-diffusion">Stable Diffusion</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Capabilities</label>
+                                            <select>
+                                                <option>Text, Image, Video</option>
+                                                <option>Image Only</option>
+                                                <option>Text Only</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="actions">
+                                        <button class="btn-success btn-sm" onclick="saveProvider('Replicate')">💾 Save</button>
+                                        <button class="btn-secondary btn-sm" onclick="testProvider('Replicate')">🔌 Test Connection</button>
+                                        <button class="btn-danger btn-sm" onclick="disconnectProvider('Replicate')">🔗 Disconnect</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Models Tab -->
+                    <div class="settings-tab" id="settings-models">
+                        <p style="color:var(--text-secondary);margin-bottom:12px;">Assign models to specific AI tasks.</p>
+                        <div style="max-width:500px;">
+                            <div class="form-group"><label>Text Generation</label><select><option>gemini-1.5-flash</option><option>gpt-4o</option><option>claude-3-sonnet</option></select></div>
+                            <div class="form-group"><label>Image Generation</label><select><option>gemini-1.5-pro</option><option>gpt-4-turbo</option></select></div>
+                            <div class="form-group"><label>Video Generation</label><select><option>gemini-1.5-pro</option><option>replicate</option></select></div>
+                            <div class="form-group"><label>Voice / TTS</label><select><option>gemini-1.5-flash</option><option>openai-tts</option></select></div>
+                            <button class="btn-primary" onclick="showToast('Model settings saved!', 'success')">Save Model Settings</button>
+                        </div>
+                    </div>
+
+                    <!-- Security Tab -->
+                    <div class="settings-tab" id="settings-security">
+                        <div style="max-width:500px;">
+                            <div class="form-group"><label>Current Password</label><input type="password" placeholder="••••••••" /></div>
+                            <div class="form-group"><label>New Password</label><input type="password" placeholder="••••••••" /></div>
+                            <div class="form-group"><label>Confirm Password</label><input type="password" placeholder="••••••••" /></div>
+                            <button class="btn-primary" onclick="showToast('Password changed!', 'success')">Change Password</button>
+                            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-color);">
+                                <div style="display:flex;align-items:center;justify-content:space-between;">
+                                    <span style="font-weight:500;color:var(--text-primary);">Two-Factor Authentication</span>
+                                    <div class="theme-toggle" onclick="this.classList.toggle('active')"><div class="knob"></div></div>
+                                </div>
+                                <p style="font-size:0.7rem;color:var(--text-secondary);margin-top:4px;">Protect your account with 2FA</p>
+                            </div>
+                            <div style="margin-top:16px;"><button class="btn-danger btn-sm" onclick="showToast('All devices logged out!', 'info')">Logout All Devices</button></div>
+                        </div>
+                    </div>
+
+                    <!-- Billing Tab -->
+                    <div class="settings-tab" id="settings-billing">
+                        <p style="color:var(--text-secondary);margin-bottom:12px;">Manage your subscription and billing.</p>
+                        <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius);padding:16px;max-width:500px;box-shadow:var(--shadow-card);">
+                            <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;">
+                                <span style="font-weight:600;color:var(--text-primary);">Current Plan</span>
+                                <span class="badge-provider active">Pro</span>
+                            </div>
+                            <div style="font-size:0.8rem;color:var(--text-secondary);">$29/month · 1,500 credits</div>
+                            <div style="margin-top:12px;display:flex;gap:8px;">
+                                <button class="btn-secondary btn-sm" onclick="showToast('Manage billing - Coming soon!', 'info')">Manage Subscription</button>
+                                <button class="btn-secondary btn-sm" onclick="showToast('Billing history - Coming soon!', 'info')">View Invoices</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Tab -->
+                    <div class="settings-tab" id="settings-about">
+                        <div style="max-width:500px;">
+                            <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px;">
+                                <div style="width:50px;height:50px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,var(--accent),var(--accent-dark));box-shadow:0 4px 12px rgba(212,98,138,0.2);">
+                                    <img src="https://i.postimg.cc/0Qr56FwW/file-00000000c33c82079684c6e3557afcd7.png" alt="Agha AI" style="width:100%;height:100%;object-fit:cover;" />
+                                </div>
+                                <div>
+                                    <div style="font-weight:700;font-size:1rem;color:var(--text-primary);">Agha AI Ad Studio</div>
+                                    <div style="font-size:0.75rem;color:var(--text-secondary);">Version 2.0.0</div>
+                                </div>
+                            </div>
+                            <div style="display:grid;gap:6px;">
+                                <div style="display:flex;gap:12px;font-size:0.8rem;"><span style="color:var(--text-muted);width:70px;">📧 Email</span><span style="color:var(--text-primary);">aghaaistoudio@gmail.com</span></div>
+                                <div style="display:flex;gap:12px;font-size:0.8rem;"><span style="color:var(--text-muted);width:70px;">📱 Phone</span><span style="color:var(--text-primary);">+923100008262</span></div>
+                                <div style="display:flex;gap:12px;font-size:0.8rem;"><span style="color:var(--text-muted);width:70px;">🌐 Website</span><span style="color:var(--accent-light);">https://aghastudio.com</span></div>
+                            </div>
+                            <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border-color);">
+                                <p style="font-size:0.7rem;color:var(--text-muted);">© 2026 Agha AI Studio. All rights reserved.</p>
+                                <p style="font-size:0.7rem;color:var(--text-muted);">Built with ❤️ for AI advertising</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- end page-settings -->
+
             </div>
+            <!-- end content-area -->
         </main>
+    </div>
+
+    <!-- ============================================================
+    CREATE MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="createModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="createModalTitle">✨ Create New Ad</h2>
+                <button class="close" onclick="closeCreateModal()">✕</button>
+            </div>
+            <div class="modal-body" id="createModalBody"></div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCreateModal()">Cancel</button>
+                <button class="btn-primary" onclick="handleCreateSubmit()">Generate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    LOGIN MODAL
+    ============================================================ -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal" style="max-width:420px;">
+            <div class="modal-header">
+                <h2>🔐 Sign In</h2>
+                <button class="close" onclick="document.getElementById('loginModal').classList.remove('open')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>Email</label><input type="email" id="loginEmail" value="demo@aghastudio.com" /></div>
+                <div class="form-group"><label>Password</label><input type="password" id="loginPassword" value="password123" /></div>
+                <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-secondary);">
+                    <label><input type="checkbox" checked /> Remember me</label>
+                    <span style="color:var(--accent-light);cursor:pointer;" onclick="showToast('Password reset link sent!', 'info')">Forgot password?</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="document.getElementById('loginModal').classList.remove('open')">Cancel</button>
+                <button class="btn-primary" onclick="handleLogin()">Sign In</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
 </body>
-  </html>
-
+</html>
